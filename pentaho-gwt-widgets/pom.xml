@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.pentaho</groupId>
+    <artifactId>pentaho-ce-jar-parent-pom</artifactId>
+    <version>1.0.11</version>
+    <!-- https://github.com/pentaho/maven-parent-poms/blob/pentaho-ce-jar-parent-pom-1.0.1/pentaho-ce-jar-parent-pom/pom.xml -->
+    <relativePath />
+  </parent>
+
+  <name>Pentaho GWT Widgets</name>
+  <groupId>pentaho</groupId>
+  <artifactId>pentaho-gwt-widgets</artifactId>
+  <version>6.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <scm>
+    <developerConnection>scm:git:git@github.com:pentaho/pentaho-commons-gwt-modules.git</developerConnection>
+    <url>https://github.com/pentaho/pentaho-commons-gwt-modules.git</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <properties>
+    <dependency.gwt.revision>2.5.1</dependency.gwt.revision>
+    <dependency.gwt-incubator.revision>2.1.0</dependency.gwt-incubator.revision>
+    <dependency.gwt-dnd.revision>3.1.1</dependency.gwt-dnd.revision>
+  </properties>
+
+  <dependencies>
+    <!-- ######################### COMPILE ######################### -->
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+      <version>${dependency.gwt.revision}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>*</artifactId>
+          <groupId>*</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-dev</artifactId>
+      <version>${dependency.gwt.revision}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>*</artifactId>
+          <groupId>*</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>-->
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-incubator</artifactId>
+      <version>${dependency.gwt-incubator.revision}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>*</artifactId>
+          <groupId>*</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gwtx</groupId>
+      <artifactId>gwtx</artifactId>
+      <version>1.5.2</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>*</artifactId>
+          <groupId>*</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.allen_sauer</groupId>
+      <artifactId>gwt-dnd</artifactId>
+      <version>${dependency.gwt-dnd.revision}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>*</artifactId>
+          <groupId>*</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>1.0.0.GA</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>*</artifactId>
+          <groupId>*</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>GWT-FX</groupId>
+      <artifactId>GWT-FX</artifactId>
+      <version>0.5.0</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>*</artifactId>
+          <groupId>*</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- ######################### RUNTIME ######################### -->
+    <!-- ######################### PROVIDED ######################## -->
+    <!-- ########################## TEST ########################### -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.4</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+      <version>${dependency.gwt.revision}</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>gwt-maven-plugin</artifactId>
+        <version>${dependency.gwt.revision}</version>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <modules>
+            <module>org.pentaho.gwt.widgets.Widgets</module>
+            <module>org.pentaho.gwt.widgets.client.filechooser.FileChooser</module>
+            <module>org.pentaho.gwt.widgets.client.formatter.JSTextFormatter</module>
+            <module>org.pentaho.mantle.SchedulingDialogs</module>
+          </modules>
+          <localWorkers>4</localWorkers>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/${artifactId}-${version}/${artifactId}/lib</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptors>
+            <descriptor>assembly.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
